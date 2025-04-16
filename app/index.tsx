@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useStopWatch } from "@/customHooks/useStopWatch";
+import { useEffect, useRef, useState } from "react";
 import { PermissionsAndroid, Text, View, StyleSheet, TextInput, Button } from "react-native";
 
 import WifiManager from "react-native-wifi-reborn"
@@ -6,11 +7,14 @@ import WifiManager from "react-native-wifi-reborn"
 export default function Index() {
   const [wifiInput, setWifiInput] = useState("")
   const [passwordInput, setPasswordInput] = useState("")
+  // const [isLocationOn, setIsLocationOn] = useState(false)
   const [timeTaken, setTimeTaken] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [wifiName, setWifiName] = useState("")
+  // const [isLocationOn, setIsLocationOn] = useState()
   const [_error, setError] = useState(false)
-
+  const [isTicking, timeElapsed, toggle] = useStopWatch(1)
+  const grantedRef = useRef(false)
 
   useEffect(() => {
     (async () => {
@@ -25,19 +29,57 @@ export default function Index() {
           buttonPositive: 'ALLOW',
         },
       );
+
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        const result = await WifiManager.getCurrentWifiSSID()
-        setWifiName(result)
-      } else {
-        setError(true)
+        grantedRef.current = true
       }
+      // if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      //   console.log("inside useEffect")
+      //   const result = await WifiManager.getCurrentWifiSSID()
+      //   setWifiName(result)
+      // } else {
+      //   setError(true)
+      // }
+
+
 
     })()
 
   }, [])
-  
+
+  // function getCurrentWifi() {
+  //   setIsLoading(true);
+  //   (async () => {
+  //     if (grantedRef.current) {
+  //       console.log("inside useEffect")
+
+  //       try {
+  //         const result = await WifiManager.getCurrentWifiSSID()
+  //         console.log(`The wifi name is ${result}`)
+  //         setWifiName(result)
+  //       }
+
+  //       catch (e) {
+  //         if (e instanceof Error) {
+  //           console.log("Error detecting the current wifi")
+  //           console.log(e.message)
+  //         }
+  //       }
+
+  //       finally {
+  //         setIsLoading(false)
+  //       }
+
+  //     } else {
+  //       setError(true)
+  //     }
+  //   })()
+
+  // }
+
   function handlePress() {
     console.log("Inside button handler")
+    toggle()
     setIsLoading(true)
     const initialTime = Date.now();
     (async () => {
@@ -46,16 +88,18 @@ export default function Index() {
         setTimeTaken(Date.now() - initialTime);
         setWifiName(wifiInput.trim());
       }
-      catch(e) {
+      catch (e) {
         setError(true)
         console.log("Connection error")
         console.log(e)
       }
       finally {
         setIsLoading(false)
+        toggle()
       }
     })()
   }
+
 
   // if (error) {
   //   return (
@@ -100,6 +144,17 @@ export default function Index() {
         />
 
       </View>
+
+      {/* <View style={styles.viewMarginTop} >
+        <Button
+          onPress={toggle}
+          title={isTicking ? "Stop" : "Start"}
+        />
+
+      </View> */}
+
+      {isTicking && <Text>Connecting</Text>}
+      <Text>{`Time taken ${timeElapsed}`}</Text>
 
       <View style={styles.viewMarginTop}>
         <Text style={styles.text} >{`You are connected to: ${wifiName || 'No wifi connection detected'}`}</Text>
