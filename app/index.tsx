@@ -112,9 +112,12 @@ export default function Index() {
         <View
             style={styles.view}
         >
+            <Text style={[styles.text, styles.marginBottom]} >
+                Make sure location is turned on
+            </Text>
 
             <View style={styles.viewInputs}>
-                <Text>Wifi to connect to</Text>
+                <Text>Wifi name</Text>
                 <TextInput
                     style={styles.input}
                     value={wifiInput}
@@ -134,7 +137,7 @@ export default function Index() {
 
             </View>
 
-            <View style={styles.viewMarginTop}>
+            <View style={styles.marginTop}>
                 <Button
                     onPress={handlePress}
                     title={isLoading ? "Loading..." : "Connect"}
@@ -142,19 +145,20 @@ export default function Index() {
 
             </View>
 
-            {/* <View style={styles.viewMarginTop} >
-        <Button
-          onPress={toggle}
-          title={isTicking ? "Stop" : "Start"}
-        />
+            {/*<View style={styles.marginTop}>*/}
+            {/*    <Button*/}
+            {/*        onPress={toggle}*/}
+            {/*        title={isTicking ? "Stop" : "Start"}*/}
+            {/*    />*/}
 
-      </View> */}
+            {/*</View>*/}
 
             {isTicking && <Text>Connecting</Text>}
-            <Text>{`Time taken ${timeElapsed}`}</Text>
+            <Text style={[styles.text, styles.marginTop]} >{`Time taken ${timeElapsed}`}</Text>
 
-            <View style={styles.viewMarginTop}>
-                <Text style={styles.text}>{`You are connected to: ${wifiName || 'No wifi connection detected'}`}</Text>
+            <View style={styles.marginTop}>
+                {/*<Text style={[styles.text, styles.marginTop]}>{`You are connected to: ${wifiName || 'No Wi-Fi connection detected'}`}</Text>*/}
+                <Text style={[styles.text, styles.marginTop]}>{`You are connected to: ${wifiName}`}</Text>
             </View>
 
             {!!timeTaken && <Text>{`Time taken to connect: ${timeTaken}`}</Text>}
@@ -202,12 +206,16 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        marginTop: 10,
+        // marginTop: 10,
         fontSize: 20,
     },
 
-    viewMarginTop: {
+    marginTop: {
         marginTop: 20
+    },
+
+    marginBottom: {
+        marginBottom: 20
     }
 
 });
