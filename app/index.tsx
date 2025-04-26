@@ -1,4 +1,4 @@
-import Index from "@/app/home";
+// import Index from "@/app/home";
 
 import * as Location from 'expo-location';
 
