@@ -12,6 +12,9 @@
       "supportsTablet": true
     },
     "android": {
+      "config": {
+        "networkSecurityConfig": "./android/app/src/main/res/xml/network_security_config.xml"
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -24,6 +27,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "expo-location",
       [
         "react-native-wifi-reborn",
         {

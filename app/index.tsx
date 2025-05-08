@@ -1,61 +1,58 @@
-// import Index from "@/app/home";
-
-import * as Location from 'expo-location';
-
-import {Text, View, StyleSheet} from 'react-native'
+import {Text, View, StyleSheet, TextInput, Button, Alert} from 'react-native'
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
-// import {setInterval} from "node:timers";
 
-export default function Login() {
+export default function Pin() {
 
-  const [isLocationOn, setLocationOn] = useState(false);
+  const [pin, setPin] = useState('');
 
-  // console.log('is location on?');
+  useEffect(() => {
+    // router.replace("/locationTurnOn")
+  }, []);
 
-  async function extracted() {
+  function handleButtonPress() {
+    // console.log("pin", pin);
 
-    const result = await Location.hasServicesEnabledAsync()
-    // if it was previously off, and now it has turned on then reroute
-    if(!isLocationOn && result) {
-      console.log("inside")
-      router.replace("/home")
+    if (pin === "1234") {
+      router.replace("/locationTurnOn")
     }
-    setLocationOn(result)
+
+    else {
+      Alert.alert("Incorrect credentials", "You have entered the wrong pin", undefined, {cancelable: true});
+    }
+
   }
 
-  useEffect(() => {
-    void extracted()
-  }, []);
-
-  useEffect(() => {
-    const clearId = setInterval(() => {
-      void extracted()
-    }, 500)
-
-    return () => {
-      clearInterval(clearId)
-    }
-
-  }, []);
-
   return (
-    <>
-      <View style={[styles.container, styles.borders]}>
-        {!isLocationOn && <Text>Make sure location is on</Text>}
-      </View>
-    </>
+    <View  style={[styles.container, styles.borders]} >
+      <Text style={styles.titleText} >Enter your PIN </Text>
+      <TextInput value={pin} onChangeText={setPin} keyboardType="numeric" style={styles.input} />
+      <Button title="Login" onPress={handleButtonPress} />
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    // padding: 10,
+  },
+
   borders: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderStyle: 'solid',
     backgroundColor: 'white',
   },
 
   container: {
+    padding: 16,
     height: '100%',
   }
 })
